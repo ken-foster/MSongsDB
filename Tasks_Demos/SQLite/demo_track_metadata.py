@@ -29,11 +29,12 @@ import sys
 import glob
 import time
 import datetime
-import numpy as np
 try:
+    import numpy as np
     import sqlite3
 except ImportError:
-    print 'you need sqlite3 installed to use this program'
+    print('you need sqlite3 and numpy installed to use this program')
+    print('run `pip install numpy sqlite3` and try again')
     sys.exit(0)
 
 

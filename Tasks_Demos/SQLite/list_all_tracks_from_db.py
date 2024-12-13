@@ -33,16 +33,18 @@ import glob
 import string
 import time
 import datetime
-import numpy as np
 try:
+    import numpy as np
     import sqlite3
 except ImportError:
-    print 'you need sqlite3 installed to use this program'
+    print('you need sqlite3 and numpy installed to use this program')
+    print('run `pip install numpy sqlite3` and try again')
     sys.exit(0)
 
 
 def die_with_usage():
-    """ HELP MENU """
+    print("""
+    HELP MENU
     print 'list_all_tracks_from_db.py'
     print '   by T. Bertin-Mahieux (2010) Columbia University'
     print 'Code to create a list of all tracks in the dataset as'
@@ -53,6 +55,7 @@ def die_with_usage():
     print 'usage:'
     print '   python list_all_tracks_from_db.py <track_metadata.db> <output.txt>'
     print ''
+          """)
     sys.exit(0)
 
 
@@ -68,10 +71,10 @@ if __name__ == '__main__':
 
     # sanity check
     if not os.path.isfile(dbfile):
-        print 'ERROR: can not find database:',dbfile
+        print('ERROR: can not find database:',dbfile)
         sys.exit(0)
     if os.path.exists(output):
-        print 'ERROR: file',output,'exists, delete or provide a new name'
+        print('ERROR: file',output,'exists, delete or provide a new name')
         sys.exit(0)
 
     # start time
@@ -90,7 +93,7 @@ if __name__ == '__main__':
 
     # sanity check
     if len(alldata) != 1000000:
-        print 'NOT A MILLION TRACKS FOUND!'
+        print('NOT A MILLION TRACKS FOUND!')
 
     # write to file
     f = open(output,'w')
@@ -103,4 +106,4 @@ if __name__ == '__main__':
     # done
     t2 = time.time()
     stimelength = str(datetime.timedelta(seconds=t2-t1))
-    print 'file',output,'created in',stimelength
+    print('file',output,'created in',stimelength)

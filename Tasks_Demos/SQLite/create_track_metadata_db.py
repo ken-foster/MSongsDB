@@ -30,11 +30,12 @@ import sys
 import glob
 import time
 import datetime
-import numpy as np
 try:
+    import numpy as np
     import sqlite3
 except ImportError:
-    print 'you need sqlite3 installed to use this program'
+    print('you need sqlite3 and numpy installed to use this program')
+    print('run `pip install numpy sqlite3` and try again')
     sys.exit(0)
 
 
@@ -109,7 +110,7 @@ def fill_from_h5(conn, h5path, verbose=0):
     h5.close()
     q += ')'
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     #conn.commit() # we don't take care of the commit!
     c.close()
@@ -138,78 +139,79 @@ def add_indices_to_db(conn, verbose=0):
     # index to search by (artist_id) or by (artist_id,release)
     q = "CREATE INDEX idx_artist_id ON songs ('artist_id','release')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (artist_mbid) or by (artist_mbid,release)
     q = "CREATE INDEX idx_artist_mbid ON songs ('artist_mbid','release')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (artist_familiarity)
     # or by (artist_familiarity,artist_hotttnesss)
     q = "CREATE INDEX idx_familiarity ON songs "
     q += "('artist_familiarity','artist_hotttnesss')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (artist_hotttnesss)
     # or by (artist_hotttnesss,artist_familiarity)
     q = "CREATE INDEX idx_hotttnesss ON songs "
     q += "('artist_hotttnesss','artist_familiarity')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (artist_name)
     # or by (artist_name,title) or by (artist_name,title,release)
     q = "CREATE INDEX idx_artist_name ON songs "
     q += "('artist_name','title','release')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (title)
     # or by (title,artist_name) or by (title,artist_name,release)
     q = "CREATE INDEX idx_title ON songs ('title','artist_name','release')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (release)
     # or by (release,artist_name) or by (release,artist_name,title)
     q = "CREATE INDEX idx_release ON songs ('release','artist_name','title')"
     if verbose > 0:
-        print q
+        print(q)
     # index to search by (duration)
     # or by (duration,artist_id)
     q = "CREATE INDEX idx_duration ON songs ('duration','artist_id')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (year)
     # or by (year,artist_id) or by (year,artist_id,title)
     q = "CREATE INDEX idx_year ON songs ('year','artist_id','title')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (year) or by (year,artist_name)
     q = "CREATE INDEX idx_year2 ON songs ('year','artist_name')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (shs_work)
     q = "CREATE INDEX idx_shs_work ON songs ('shs_work')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # index to search by (shs_perf)
     q = "CREATE INDEX idx_shs_perf ON songs ('shs_perf')"
     if verbose > 0:
-        print q
+        print(q)
     c.execute(q)
     # done, commit
     conn.commit()
 
 
 def die_with_usage():
-    """ HELP MENU """
+    print(
+        """ HELP MENU 
     print 'Command to create the track_metadata SQLite database'
     print 'to launch (it might take a while!):'
     print '   python create_track_metadata_db.py [FLAGS] <MSD dir> <tmdb>'
@@ -220,6 +222,7 @@ def die_with_usage():
     print '  -shsdata f  - file containing the SHS dataset'
     print '                (you can simply concatenate train and test)'
     print '  -verbose    - print every query'
+    """)
     sys.exit(0)
 
 
@@ -258,12 +261,12 @@ if __name__ == '__main__':
 
     # sanity checks
     if not os.path.isdir(maindir):
-        print 'ERROR: %s is not a directory.' % maindir
+        print('ERROR: %s is not a directory.' % maindir)
     if os.path.exists(dbfile):
-        print 'ERROR: %s already exists! delete or provide a new name' % dbfile
+        print('ERROR: %s already exists! delete or provide a new name' % dbfile)
         sys.exit(0)
     if shsdataset != '' and not os.path.isfile(shsdataset):
-        print 'ERROR %s does not exist.' % shsdataset
+        print('ERROR %s does not exist.' % shsdataset)
         sys.exit(0)
 
     # start time
@@ -287,12 +290,12 @@ if __name__ == '__main__':
     conn.commit()
     t2 = time.time()
     stimelength = str(datetime.timedelta(seconds=t2 - t1))
-    print 'added the content of', cnt_files, 'files to database:', dbfile
-    print 'it took:', stimelength
+    print('added the content of', cnt_files, 'files to database:', dbfile)
+    print('it took:', stimelength)
 
     # add SHS data
     if shsdataset != '':
-        print 'We add SHS data from file: %s' % shsdataset
+        print('We add SHS data from file: %s' % shsdataset)
         # iterate over SHS file
         shs = open(shsdataset, 'r')
         for line in shs:
@@ -311,7 +314,7 @@ if __name__ == '__main__':
             q = "UPDATE songs SET shs_perf=" + perf + ", shs_work=" + str(work)
             q += " WHERE track_id='" + tid + "'"
             if verbose > 0:
-                print q
+                print(q)
             conn.execute(q)
         # iteration done
         shs.close()
@@ -328,10 +331,10 @@ if __name__ == '__main__':
     # sanity check
     assert nrows_before == nrows_after, 'Lost rows during indexing?'
     if nrows_before != 1000000:
-        print '*********************************************************'
-        print 'We got', nrows_before, 'rows.'
-        print 'This is not the full MillionSongDataset! just checking...'
-        print '*********************************************************'
+        print('*********************************************************')
+        print('We got', nrows_before, 'rows.')
+        print('This is not the full MillionSongDataset! just checking...')
+        print( '*********************************************************')
 
     # close connection
     conn.close()
@@ -340,6 +343,6 @@ if __name__ == '__main__':
     t3 = time.time()
 
     # DONE
-    print 'done! (indices included) database:', dbfile
+    print('done! (indices included) database:', dbfile)
     stimelength = str(datetime.timedelta(seconds=t3 - t1))
-    print 'execution time:', stimelength
+    print('execution time:', stimelength)
