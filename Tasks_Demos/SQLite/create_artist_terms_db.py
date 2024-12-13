@@ -34,11 +34,12 @@ import sys
 import glob
 import time
 import datetime
-import numpy as np
 try:
+    import numpy as np
     import sqlite3
 except ImportError:
-    print 'you need sqlite3 installed to use this program'
+    print('you need sqlite3 and numpy installed to use this program')
+    print('run `pip install numpy sqlite3` and try again')
     sys.exit(0)
 
 
@@ -182,20 +183,24 @@ def add_indices_to_db(conn,verbose=0):
     # index to search by (artist_id) or (artist_id,term) on artist_term table
     # samething for      (artist_id)    (artist_id,mbtag)   artist_mbtag
     q = "CREATE INDEX idx_artist_id_term ON artist_term ('artist_id','term')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     q = "CREATE INDEX idx_artist_id_mbtag ON artist_mbtag ('artist_id','mbtag')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     # index to search by (term) or (term,artist_id) on artist_terms table
     # might be redundant, we probably just need an index on term since the first
     # one can do the join search
     # samehting for (mbtag,artist_id)
     q = "CREATE INDEX idx_term_artist_id ON artist_term ('term','artist_id')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     q = "CREATE INDEX idx_mbtag_artist_id ON artist_mbtag ('mbtag','artist_id')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     # we're done, we don't need to add keys to artists and tersm
     # since they have only one column that is a PRIMARY KEY, they have
@@ -204,7 +209,7 @@ def add_indices_to_db(conn,verbose=0):
     
 
 def die_with_usage():
-    """ HELP MENU """
+    print(""" HELP MENU 
     print 'Command to create the artist_terms SQLite database'
     print 'to launch (it might take a while!):'
     print '   python create_artist_terms_db.py <MillionSong dir> <termlist> <mbtaglist> <artistlist> <artist_term.db>'
@@ -218,6 +223,7 @@ def die_with_usage():
     print 'for artist list, check:       /Tasks_Demos/NamesAnalysis/list_all_artists.py'
     print '          or (faster!):       /Tasks_Demos/SQLite/list_all_artists_from_db.py'
     print 'for termlist and mbtaglist:   /Tasks_Demos/Tagging/get_unique_terms.py'
+          """)
     sys.exit(0)
 
 
@@ -247,7 +253,7 @@ if __name__ == '__main__':
 
    # check if file exists!
     if os.path.exists(dbfile):
-        print dbfile,'already exists! delete or provide a new name'
+        print( dbfile,'already exists! delete or provide a new name')
         sys.exit(0) 
 
     # start time
@@ -261,7 +267,7 @@ if __name__ == '__main__':
             continue
         allterms.append(line.strip())
     f.close()
-    print 'found',len(allterms),'terms in file:',termfile
+    print('found',len(allterms),'terms in file:',termfile)
 
     # get all mbtags
     allmbtags = []
@@ -271,7 +277,7 @@ if __name__ == '__main__':
             continue
         allmbtags.append(line.strip())
     f.close()
-    print 'found',len(allmbtags),'mbtags in file:',mbtagfile
+    print('found',len(allmbtags),'mbtags in file:',mbtagfile)
 
     # get all track ids per artist
     trackids = []
@@ -283,13 +289,13 @@ if __name__ == '__main__':
         artistids.append( line.split('<SEP>')[0] )
         trackids.append( line.split('<SEP>')[2] )
     f.close()
-    print 'found',len(trackids),'artists in file:',artistfile
+    print( 'found',len(trackids),'artists in file:',artistfile)
 
     # create database
     create_db(dbfile,artistids,allterms,allmbtags)
     t2 = time.time()
     stimelength = str(datetime.timedelta(seconds=t2-t1))
-    print 'tables created after', stimelength
+    print('tables created after', stimelength)
 
     # open connection
     conn = sqlite3.connect(dbfile)
@@ -307,7 +313,7 @@ if __name__ == '__main__':
     # time update
     t3 = time.time()
     stimelength = str(datetime.timedelta(seconds=t3-t1))
-    print 'Looked at',cnt_files,'files, done in',stimelength
+    print('Looked at',cnt_files,'files, done in',stimelength)
 
     # creates indices
     add_indices_to_db(conn,verbose=0)
@@ -318,6 +324,6 @@ if __name__ == '__main__':
     # done
     t4 = time.time()
     stimelength = str(datetime.timedelta(seconds=t4-t1))
-    print 'All done (including indices) in',stimelength
+    print('All done (including indices) in',stimelength)
 
     

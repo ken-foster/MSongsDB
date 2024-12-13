@@ -34,11 +34,13 @@ import sys
 import glob
 import time
 import datetime
-import numpy as np
+
 try:
+    import numpy as np
     import sqlite3
 except ImportError:
-    print 'you need sqlite3 installed to use this program'
+    print('you need sqlite3 and numpy installed to use this program')
+    print('run `pip install numpy sqlite3` and try again')
     sys.exit(0)
 
 
@@ -145,11 +147,13 @@ def add_indices_to_db(conn,verbose=0):
     c = conn.cursor()
     # index to search by (target) or (target,sims)
     q = "CREATE INDEX idx_target_sim ON similarity ('target','similar')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     # index to search by (sims) or (sims,target)
     q = "CREATE INDEX idx_sim_target ON similarity ('similar','target')"
-    if verbose > 0: print q
+    if (verbose > 0): 
+        print(q)
     c.execute(q)
     # done (artists table as an implicit index as artist_id is the
     # primary key)
@@ -157,10 +161,10 @@ def add_indices_to_db(conn,verbose=0):
 
 
 def die_with_usage():
-    """ HELP MENU """
+    print("""
     print 'Command to create the artist_terms SQLite database'
     print 'to launch (it might take a while!):'
-    print '   python create_artist_terms_db.py <MillionSong dir> <artistlist> <artist_similarity.db>'
+    print '   python create_artist_similarity_db.py <MillionSong dir> <artistlist> <artist_similarity.db>'
     print 'PARAMS'
     print '  MillionSong dir        - directory containing .h5 song files in sub dirs'
     print '  artist list            - list in form: artistid<SEP>artist_mbid<SEP>track_id<SEP>...'
@@ -168,6 +172,7 @@ def die_with_usage():
     print ''
     print 'for artist list, check:       /Tasks_Demos/NamesAnalysis/list_all_artists.py'
     print '          or (faster!):       /Tasks_Demos/SQLite/list_all_artists_from_db.py'
+    """)
     sys.exit(0)
 
     
@@ -194,7 +199,7 @@ if __name__ == '__main__':
 
     # check if file exists!
     if os.path.exists(dbfile):
-        print dbfile,'already exists! delete or provide a new name'
+        print(dbfile,'already exists! delete or provide a new name')
         sys.exit(0)
 
     # start time
@@ -210,7 +215,7 @@ if __name__ == '__main__':
         artistids.append( line.split('<SEP>')[0] )
         trackids.append( line.split('<SEP>')[2] )
     f.close()
-    print 'found',len(trackids),'artists in file:',artistfile
+    print('found',len(trackids),'artists in file:',artistfile)
 
     # create database
     create_db(dbfile,artistids)
@@ -237,4 +242,4 @@ if __name__ == '__main__':
     # done
     t2 = time.time()
     stimelength = str(datetime.timedelta(seconds=t2-t1))
-    print 'All done (including indices) in',stimelength
+    print('All done (including indices) in',stimelength)
