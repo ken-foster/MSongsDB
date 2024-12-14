@@ -26,19 +26,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+import datetime
+import glob
 import os
 import sys
-import glob
+import sqlite3
 import string
 import time
-import datetime
+
 try:
     import numpy as np
-    import sqlite3
 except ImportError:
-    print('you need sqlite3 and numpy installed to use this program')
-    print('run `pip install numpy sqlite3` and try again')
+    print('you need numpy installed to use this program')
+    print('run `pip install numpy` and try again')
     sys.exit(0)
 
 
