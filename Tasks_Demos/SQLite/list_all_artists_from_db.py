@@ -107,9 +107,10 @@ if __name__ == '__main__':
 
     # write to file
     f = open(output,'w')
-    for data in alldata:
+    for data in alldata[:100]:
+        #print(data)
         f.write(data[0]+'<SEP>'+data[1]+'<SEP>'+data[2]+'<SEP>')
-        f.write( data[3].encode('utf-8') + '\n' )
+        f.write( data[3] + '\n' )
     f.close()
 
     # done

@@ -163,16 +163,17 @@ def add_indices_to_db(conn,verbose=0):
 
 def die_with_usage():
     print("""
-    print 'Command to create the artist_terms SQLite database'
-    print 'to launch (it might take a while!):'
-    print '   python create_artist_similarity_db.py <MillionSong dir> <artistlist> <artist_similarity.db>'
-    print 'PARAMS'
-    print '  MillionSong dir        - directory containing .h5 song files in sub dirs'
-    print '  artist list            - list in form: artistid<SEP>artist_mbid<SEP>track_id<SEP>...'
-    print '  artist_similarity.db   - filename for the database'
-    print ''
-    print 'for artist list, check:       /Tasks_Demos/NamesAnalysis/list_all_artists.py'
-    print '          or (faster!):       /Tasks_Demos/SQLite/list_all_artists_from_db.py'
+    Command to create the artist_terms SQLite database
+    to launch (it might take a while!):
+    python create_artist_similarity_db.py <MillionSong dir> <artistlist> <artist_similarity.db>
+    
+    PARAMS
+        MillionSong dir        - directory containing .h5 song files in sub dirs
+        artist list            - list in form: artistid<SEP>artist_mbid<SEP>track_id<SEP>...
+        artist_similarity.db   - filename for the database'
+
+    for artist list, check:       /Tasks_Demos/NamesAnalysis/list_all_artists.py
+              or (faster!):       /Tasks_Demos/SQLite/list_all_artists_from_db.py
     """)
     sys.exit(0)
 
