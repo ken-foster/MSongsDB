@@ -64,7 +64,10 @@ def encode_string(s):
     EXAMPLE:
       That's my boy! -> 'That''s my boy!'
     """
-    return "'"+s.replace("'","''")+"'"
+    try:
+        return "'"+s.replace("'","''")+"'"
+    except TypeError:
+        return "'"+s.decode("UTF-8").replace("'","''")+"'"
 
 
 def create_db(filename,artistlist):
@@ -229,10 +232,11 @@ if __name__ == '__main__':
     cnt_files = 0
     for trackid in trackids:
         f = os.path.join(maindir,path_from_trackid(trackid))
-        fill_from_h5(conn,f)
-        cnt_files += 1
-        if cnt_files % 500 == 0:
-            conn.commit()
+        if os.path.exists(f):
+            fill_from_h5(conn,f)
+            cnt_files += 1
+            if cnt_files % 500 == 0:
+                conn.commit()
     conn.commit()
 
     # create indices

@@ -1,3 +1,5 @@
+# python list_all_artists_from_db.py "C:\Users\foste\Desktop\Projects\delistyle\data\full\track_metadata.db" "C:\Users\foste\Desktop\Projects\delistyle\data\reference_lists\artistlist.txt"
+
 """
 Thierry Bertin-Mahieux (2010) Columbia University
 tb2332@columbia.edu
@@ -107,7 +109,7 @@ if __name__ == '__main__':
 
     # write to file
     f = open(output,'w')
-    for data in alldata[:100]:
+    for data in alldata:
         #print(data)
         f.write(data[0]+'<SEP>'+data[1]+'<SEP>'+data[2]+'<SEP>')
         f.write( data[3] + '\n' )
