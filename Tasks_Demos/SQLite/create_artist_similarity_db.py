@@ -211,7 +211,7 @@ if __name__ == '__main__':
     trackids = []
     artistids = []
     f = open(artistfile,'r')
-    for line in f.xreadlines():
+    for line in f:
         if line == '' or line.strip() == '':
             continue
         artistids.append( line.split('<SEP>')[0] )
